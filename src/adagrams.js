@@ -39,7 +39,6 @@ export const drawLetters = () => {
     Z: 1,
   };
 
-  
   let poolArray = generatePoolArray(LETTER_POOL);
 
   const HANDSIZE = 10;
@@ -58,8 +57,7 @@ export const drawLetters = () => {
       }
     }
   }
-  return hand;
-  
+  return hand;  
 };
 
 export const usesAvailableLetters = (input, lettersInHand) => {
@@ -86,7 +84,7 @@ export const scoreWord = (word) => {
       J: 8, X: 8,
       Q: 10, Z: 10
     };
-    
+
     let totalScore = 0;
     for(let i = 0; i < word.length; i++){
       let char = word[i].toUpperCase();
@@ -106,4 +104,30 @@ export const scoreWord = (word) => {
 
 export const highestScoreFrom = (words) => {
   // Implement this method for wave 4
+  let winningWord = {
+    word: '',
+    score: 0
+  };
+
+  for(let i = 0; i < words.length; i++){
+    let wordScore = scoreWord(words[i]);
+    if(wordScore > winningWord.score ||
+      wordScore===winningWord.score 
+      && tieBreakerFirstIsBetter(words[i], winningWord.word )){
+      winningWord.word = words[i];
+      winningWord.score = wordScore;
+    }
+  }
+  return winningWord;
+};
+
+const tieBreakerFirstIsBetter = (word1, word2)=>{
+  let BEST_LETTER_COUNT = 10;
+  if(word2.length === BEST_LETTER_COUNT){
+    return false;
+  }
+  if(word1.length === BEST_LETTER_COUNT){
+    return true;
+  }
+  return word1.length<word2.length;  
 };
